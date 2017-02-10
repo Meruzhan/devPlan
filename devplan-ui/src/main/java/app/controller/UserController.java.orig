@@ -1,0 +1,68 @@
+package app.controller;
+
+<<<<<<< Updated upstream:devplan-ui/src/main/java/app/controller/UserController.java
+import model.User;
+=======
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import model.UserDto;
+>>>>>>> Stashed changes:devplan-ui/src/main/java/controller/UserController.java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import service.UserService;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by zaven.chilingaryan on 12/2/2016.
+ */
+@RestController
+@RequestMapping("/users")
+public class UserController {
+
+    @Autowired
+    private UserService userService;
+
+    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public List<User> loadUsers(@RequestParam Map<String, String> requestParameters) {
+        return userService.loadAll(requestParameters);
+    }
+
+
+    @RequestMapping(value = "{id}", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+
+    public User loadUserById(@PathVariable Long id) {
+        return userService.loadById(id);
+    }
+
+
+    @RequestMapping(method = RequestMethod.DELETE, produces = "application/json")
+    @ResponseBody
+<<<<<<< Updated upstream:devplan-ui/src/main/java/app/controller/UserController.java
+    public ResponseEntity<String> deleteUser(@RequestBody User user) {
+=======
+    public ResponseEntity<String> deleteUser(@RequestBody String jsonInString) throws IOException {
+        UserDto user = mapper.readValue(jsonInString, UserDto.class);
+>>>>>>> Stashed changes:devplan-ui/src/main/java/controller/UserController.java
+        userService.delete(user);
+        return new ResponseEntity<String>("", HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+<<<<<<< Updated upstream:devplan-ui/src/main/java/app/controller/UserController.java
+    public Long saveUser(@RequestBody User user) {
+        return (userService.save(user)).getId();
+=======
+    public String saveUser(@RequestBody String jsonInString) throws IOException {
+        UserDto user = mapper.readValue(jsonInString, UserDto.class);
+        return mapper.writeValueAsString((userService.save(user)).getId());
+>>>>>>> Stashed changes:devplan-ui/src/main/java/controller/UserController.java
+    }
+
+}
