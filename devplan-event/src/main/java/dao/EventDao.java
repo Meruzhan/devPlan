@@ -1,6 +1,7 @@
 package dao;
 
 import model.Event;
+import model.Subscriber;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -22,4 +23,6 @@ public interface EventDao extends JpaRepository<Event, Long>, JpaSpecificationEx
 
     @Query(countQuery = "select e from events e where title like '%:title%'")
     List<Event> findEventsByTitle(@Param("title") String title);
+
+
 }

@@ -1,6 +1,7 @@
 package service;
 
 import model.Event;
+import model.EventUser;
 import model.Subscriber;
 
 import java.util.Date;
@@ -34,4 +35,12 @@ public interface EventService {
      * @throws NullPointerException if {@code eventId} is not exist
      */
     List<Subscriber> loadEventSubscriber(Long eventId);
+
+    Long loadSubscribersCount(Long eventId);
+
+    Boolean loadSubscriber(Long eventId, Long userId);
+
+    Boolean deleteSubscriber(Long eventId,Long subscriberId);
+
+    EventUser saveSubscribe(Long eventId, Long userId);
 }
