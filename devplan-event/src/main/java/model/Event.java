@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -18,7 +16,7 @@ import java.util.List;
 @Table(name = "events")
 @Component
 public class Event implements Serializable {
-    private long id;
+    private Long id;
     private Date startDate;
     private Date endDate;
     private String title;
@@ -29,11 +27,11 @@ public class Event implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -56,7 +54,6 @@ public class Event implements Serializable {
     }
 
     @Column(name = "title")
-    @Min(2)
     public String getTitle() {
         return title;
     }

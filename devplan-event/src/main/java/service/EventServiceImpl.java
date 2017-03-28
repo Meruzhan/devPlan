@@ -2,16 +2,20 @@ package service;
 
         import dao.EventDao;
         import dao.EventUserDao;
-        import filter.Filter;
+        import filter.EventFilter;
         import model.Event;
         import model.EventUser;
         import model.Subscriber;
         import org.springframework.beans.factory.annotation.Autowired;
+        import org.springframework.data.domain.Page;
+        import org.springframework.data.domain.PageRequest;
+        import org.springframework.data.domain.Pageable;
         import org.springframework.stereotype.Repository;
         import org.springframework.stereotype.Service;
         import org.springframework.transaction.annotation.Transactional;
 
         import java.util.Date;
+        import java.util.HashMap;
         import java.util.List;
         import java.util.Map;
         import java.util.stream.Collectors;
@@ -23,14 +27,14 @@ package service;
 @Transactional
 public class EventServiceImpl implements EventService {
     private EventDao eventDao;
-    private Filter<Event> criteriaFilter;
+    private EventFilter<Event> criteriaEventFilter;
 
     @Autowired
     private EventUserDao eventUserDao;
 
     @Autowired
-    public void setCriteriaFilter(Filter<Event> criteriaFilter) {
-        this.criteriaFilter = criteriaFilter;
+    public void setCriteriaEventFilter(EventFilter<Event> criteriaEventFilter) {
+        this.criteriaEventFilter = criteriaEventFilter;
     }
 
     @Autowired
@@ -38,8 +42,9 @@ public class EventServiceImpl implements EventService {
         this.eventDao = eventDao;
     }
 
-    public List<Event> loadAllEvents() {
-        return (List<Event>) eventDao.findAll();
+    public Page<Event> loadPageEvents(int page,int size) {
+        Pageable pages = new PageRequest(page,size);
+        return  eventDao.findAll(pages);
     }
 
     public Event loadEventById(long id) {
@@ -62,9 +67,12 @@ public class EventServiceImpl implements EventService {
         return eventDao.save(event);
     }
 
-    public List<Event> loadSearchEvent(Map<String, String> criterion) {
-        criteriaFilter.setFilters(criterion);
-        return eventDao.findAll(criteriaFilter);
+    public Page<Event> loadSearchEvent(int page, int size, String searchField) {
+        Map<String,String> criteriaMap = new HashMap<>();
+        criteriaMap.put("title", searchField);
+        Pageable pages = new PageRequest(page,size);
+        criteriaEventFilter.setFilters(criteriaMap);
+        return eventDao.findAll(criteriaEventFilter,pages);
     }
 
     public List<Subscriber> loadEventSubscriber(Long eventId) {

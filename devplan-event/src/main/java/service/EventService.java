@@ -3,6 +3,7 @@ package service;
 import model.Event;
 import model.EventUser;
 import model.Subscriber;
+import org.springframework.data.domain.Page;
 
 import java.util.Date;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.Map;
  */
 public interface EventService {
 
-    List<Event> loadAllEvents();
+    Page<Event>  loadPageEvents(int page, int size);
 
     Event loadEventById(long id);
 
@@ -25,8 +26,7 @@ public interface EventService {
 
     Event saveEvent(Event event);
 
-    List<Event> loadSearchEvent(Map<String,String> criterion);
-
+    Page<Event> loadSearchEvent(int page, int size, String searchField) ;
 
     /**
      *

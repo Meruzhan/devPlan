@@ -18,6 +18,7 @@ import java.util.List;
  */
 @Repository
 public interface EventDao extends JpaRepository<Event, Long>, JpaSpecificationExecutor<Event> {
+
     @Query(countQuery = "select e from events e where start_date =:startDate")
     List<Event> findEventByStartDate(@Param("startDate") Date startDate);
 

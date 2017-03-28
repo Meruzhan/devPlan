@@ -12,14 +12,17 @@ import java.util.Map;
  */
 
 @Service
-public class Filter<T> implements Specification<T> {
+public class EventFilter<T> implements Specification<T> {
 
     private Map<String, String> filters;
 
     public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         Predicate predicate = cb.disjunction();
 
+//        cb.like(root.get(filters.get("")),"%"+filters.get(""));
+
         predicate.getExpressions().add(cb.and(getPredicates(filters, root, cb)));
+//        predicate.getExpressions().add(cb.and(getPredicates(filters, root, cb)));
 
         return predicate;
     }
@@ -30,7 +33,8 @@ public class Filter<T> implements Specification<T> {
 
         for (Map.Entry filter : filters.entrySet()) {
             index--;
-            predicate[index] = cb.equal(root.get(filter.getKey().toString()),filter.getValue());
+            predicate[index] =  cb.like(root.get(filter.getKey().toString()),"%"+filter.getValue().toString()+"%");
+//            predicate[index] = cb.equal(root.get(filter.getKey().toString()),filter.getValue());
 
         }
 

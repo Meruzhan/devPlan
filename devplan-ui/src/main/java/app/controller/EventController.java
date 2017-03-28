@@ -3,11 +3,10 @@ package app.controller;
 import model.Event;
 import model.EventUser;
 import model.Subscriber;
-import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import service.EventService;
 import service.UserService;
@@ -28,18 +27,18 @@ public class EventController {
     @CrossOrigin(origins = "*")
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public ResponseEntity<List<Event>> loadAllEvents() {
-        return new ResponseEntity<List<Event>>(eventService.loadAllEvents(), HttpStatus.OK);
+    public ResponseEntity<Page<Event>> loadAllEvents(@RequestParam(name = "page")int page, @RequestParam(name = "size")int size ) {
+        return new ResponseEntity<>(eventService.loadPageEvents(page,size), HttpStatus.OK);
     }
 
     @CrossOrigin(origins = "*")
     @RequestMapping(value = "/search", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<List<Event>> searchEvent(@RequestParam Map<String, String> criterionSherch) {
-        List<Event> events = eventService.loadSearchEvent(criterionSherch);
-        if (events.isEmpty()) {
-            return new ResponseEntity<List<Event>>((List) null, HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<List<Event>>(events, HttpStatus.OK);
+    @ResponseBody
+    public ResponseEntity<Page<Event>> searchEvent(@RequestParam (name = "page")int page,
+                                                   @RequestParam(name = "size")int size,
+                                                   @RequestParam(name = "search")String criterionSearch) {
+        Page<Event> events = eventService.loadSearchEvent(page,size,criterionSearch);
+        return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
     @CrossOrigin(origins = "*")
